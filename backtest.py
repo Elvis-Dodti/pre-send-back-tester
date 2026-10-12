@@ -10,9 +10,12 @@ def run_backtest(clients, profiles, shares, use_llm=False):
     df = shares.copy()
 
     # 1. checker + score over history
-    viols = [check_pair(cdict[r.client_id], pdict[r.profile_id]) for r in df.itertuples()]
-    df["hard_fields"] = [[v["field"] for v in vs if v["severity"] == "hard"] for vs in viols]
-    df["soft_fields"] = [[v["field"] for v in vs if v["severity"] == "soft"] for vs in viols]
+    viols = [check_pair(cdict[r.client_id], pdict[r.profile_id]) for r in
+             df.itertuples()]
+    df["hard_fields"] = [[v["field"] for v in vs if v["severity"] == "hard"]
+                         for vs in viols]
+    df["soft_fields"] = [[v["field"] for v in vs if v["severity"] == "soft"]
+                         for vs in viols]
     df["blocked"] = df.hard_fields.str.len() > 0
     df["warned"] = df.soft_fields.str.len() > 0
     scored = [score_violations(vs) for vs in viols]
@@ -22,10 +25,13 @@ def run_backtest(clients, profiles, shares, use_llm=False):
     # 2. structure the free-text feedback
     rej = ~df.accepted
     df["tags"] = [["accepted"]] * len(df)
-    df.loc[rej, "tags"] = pd.Series(tag_feedback(df.loc[rej, "feedback"], use_llm), index=df.index[rej])
+    df.loc[rej, "tags"] = pd.Series(
+        tag_feedback(df.loc[rej, "feedback"], use_llm), index=df.index[rej])
     stated_fields = set(HARD_FIELDS + ["age", "city", "education", "height"])
-    df["preventable"] = rej & df.tags.apply(lambda t: any(x in stated_fields for x in t))
-    df["preventable_hard"] = rej & df.tags.apply(lambda t: any(x in HARD_FIELDS for x in t))
+    df["preventable"] = rej & df.tags.apply(
+        lambda t: any(x in stated_fields for x in t))
+    df["preventable_hard"] = rej & df.tags.apply(
+        lambda t: any(x in HARD_FIELDS for x in t))
 
     n, acc, nrej = len(df), int(df.accepted.sum()), int(rej.sum())
     blocked = df[df.blocked]
@@ -38,32 +44,40 @@ def run_backtest(clients, profiles, shares, use_llm=False):
         hard_blocked=len(blocked),
         hard_blocked_pct_of_shares=len(blocked) / n,
         rejections_caught=int((blocked.accepted == False).sum()),
-        recall_hard_preventable=(df.preventable_hard & df.blocked).sum() / max(df.preventable_hard.sum(), 1),
-        false_blocks=int(blocked.accepted.sum()),  # accepted profiles we'd have wrongly blocked
+        recall_hard_preventable=(df.preventable_hard & df.blocked).sum() / max(
+            df.preventable_hard.sum(), 1),
+        false_blocks=int(blocked.accepted.sum()),
+        # accepted profiles we'd have wrongly blocked
         acceptance_after=kept.accepted.mean(),
         shares_after=len(kept), accepted_after=int(kept.accepted.sum()),
         accept_rate_soft_violators=df[df.warned & ~df.blocked].accepted.mean(),
         accept_rate_clean=df[~df.warned & ~df.blocked].accepted.mean(),
     )
-    summary["lift_pts"] = (summary["acceptance_after"] - summary["acceptance_rate"]) * 100
+    summary["lift_pts"] = (summary["acceptance_after"] - summary[
+        "acceptance_rate"]) * 100
     summary["time_saved_pct"] = summary["hard_blocked_pct_of_shares"]
 
     by_mm = df.groupby("matchmaker").apply(lambda g: pd.Series(dict(
-        shares=len(g), acceptance=g.accepted.mean(), hard_flag_rate=g.blocked.mean(),
-        acceptance_after=g[~g.blocked].accepted.mean())), include_groups=False).round(3)
+        shares=len(g), acceptance=g.accepted.mean(),
+        hard_flag_rate=g.blocked.mean(),
+        acceptance_after=g[~g.blocked].accepted.mean())),
+                                           include_groups=False).round(3)
 
     # 3. does the match score mean anything? acceptance by tier on past shares
-    by_tier = (df.groupby("tier").accepted.agg(shares="count", acceptance="mean")
-                 .reindex(TIER_ORDER).dropna().round(3))
+    by_tier = (
+        df.groupby("tier").accepted.agg(shares="count", acceptance="mean")
+        .reindex(TIER_ORDER).dropna().round(3))
 
     # 4. tagger quality vs hidden ground truth (only possible because data is synthetic)
     r = df[rej]
-    summary["tagger_accuracy"] = float(r.apply(lambda x: x.true_reason in x.tags, axis=1).mean())
+    summary["tagger_accuracy"] = float(
+        r.apply(lambda x: x.true_reason in x.tags, axis=1).mean())
     return df, summary, by_mm, by_tier
 
 
 if __name__ == "__main__":
     from data_gen import generate
+
     c, p, s = generate()
     data, sm, mm, bt = run_backtest(c, p, s)
     for k, v in sm.items():
