@@ -1,0 +1,167 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="DuplicatedCode" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <Languages>
+        <language minSize="258" name="Python" />
+      </Languages>
+    </inspection_tool>
+    <inspection_tool class="Eslint" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <list>
+          <option value="aiohttp" />
+          <option value="aiosignal" />
+          <option value="amqp" />
+          <option value="annotated-types" />
+          <option value="anyio" />
+          <option value="async-timeout" />
+          <option value="attrs" />
+          <option value="autobahn" />
+          <option value="Automat" />
+          <option value="billiard" />
+          <option value="boto3" />
+          <option value="botocore" />
+          <option value="cachetools" />
+          <option value="celery" />
+          <option value="certifi" />
+          <option value="cffi" />
+          <option value="channels" />
+          <option value="channels_redis" />
+          <option value="charset-normalizer" />
+          <option value="click" />
+          <option value="click-didyoumean" />
+          <option value="click-plugins" />
+          <option value="click-repl" />
+          <option value="colorama" />
+          <option value="constantly" />
+          <option value="cron_descriptor" />
+          <option value="cryptography" />
+          <option value="daphne" />
+          <option value="distro" />
+          <option value="dj-rest-auth" />
+          <option value="django-allauth" />
+          <option value="django-background-tasks" />
+          <option value="django-celery-beat" />
+          <option value="django-cors-headers" />
+          <option value="django-extensions" />
+          <option value="django-filter" />
+          <option value="django-storages" />
+          <option value="django-timezone-field" />
+          <option value="djangorestframework" />
+          <option value="djangorestframework-csv" />
+          <option value="djangorestframework-simplejwt" />
+          <option value="et_xmlfile" />
+          <option value="exceptiongroup" />
+          <option value="frozenlist" />
+          <option value="google-api-core" />
+          <option value="google-api-python-client" />
+          <option value="google-apps-meet" />
+          <option value="google-auth" />
+          <option value="google-auth-httplib2" />
+          <option value="google-auth-oauthlib" />
+          <option value="googleapis-common-protos" />
+          <option value="greenlet" />
+          <option value="grpcio" />
+          <option value="grpcio-status" />
+          <option value="gunicorn" />
+          <option value="h11" />
+          <option value="h2" />
+          <option value="hpack" />
+          <option value="httpcore" />
+          <option value="httplib2" />
+          <option value="httptools" />
+          <option value="httpx" />
+          <option value="hyperframe" />
+          <option value="hyperlink" />
+          <option value="idna" />
+          <option value="incremental" />
+          <option value="jmespath" />
+          <option value="jsonpatch" />
+          <option value="jsonpointer" />
+          <option value="kombu" />
+          <option value="msgpack" />
+          <option value="msgpack-python" />
+          <option value="multidict" />
+          <option value="numpy" />
+          <option value="oauthlib" />
+          <option value="openai" />
+          <option value="openpyxl" />
+          <option value="orjson" />
+          <option value="packaging" />
+          <option value="pandas" />
+          <option value="pillow" />
+          <option value="priority" />
+          <option value="prompt_toolkit" />
+          <option value="proto-plus" />
+          <option value="protobuf" />
+          <option value="pyasn1" />
+          <option value="pyasn1_modules" />
+          <option value="pycparser" />
+          <option value="pydantic" />
+          <option value="pydantic_core" />
+          <option value="PyJWT" />
+          <option value="pyOpenSSL" />
+          <option value="pyparsing" />
+          <option value="python-crontab" />
+          <option value="python-dateutil" />
+          <option value="pytz" />
+          <option value="PyYAML" />
+          <option value="razorpay" />
+          <option value="redis" />
+          <option value="regex" />
+          <option value="requests" />
+          <option value="requests-oauthlib" />
+          <option value="rsa" />
+          <option value="s3transfer" />
+          <option value="service-identity" />
+          <option value="setuptools" />
+          <option value="six" />
+          <option value="sniffio" />
+          <option value="SQLAlchemy" />
+          <option value="tenacity" />
+          <option value="tiktoken" />
+          <option value="tqdm" />
+          <option value="Twisted" />
+          <option value="txaio" />
+          <option value="typing_extensions" />
+          <option value="tzdata" />
+          <option value="unicodecsv" />
+          <option value="uritemplate" />
+          <option value="urllib3" />
+          <option value="uvicorn" />
+          <option value="uvloop" />
+          <option value="vine" />
+          <option value="watchfiles" />
+          <option value="wcwidth" />
+          <option value="websockets" />
+          <option value="XlsxWriter" />
+          <option value="yarl" />
+          <option value="zope.interface" />
+          <option value="langchain" />
+          <option value="langchain-core" />
+          <option value="langchain-openai" />
+          <option value="langchain-pinecone" />
+          <option value="langchain-text-splitters" />
+          <option value="langsmith" />
+          <option value="pinecone-client" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyPep8Inspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="ignoredErrors">
+        <list>
+          <option value="E302" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="str.*" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="SqlNoDataSourceInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+  </profile>
+</component>

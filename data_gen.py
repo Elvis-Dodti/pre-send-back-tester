@@ -8,7 +8,8 @@ RELIGION_W = [0.60, 0.15, 0.10, 0.08, 0.07]
 EDU = ["High school", "Graduate", "Postgraduate"]
 EDU_RANK = {e: i for i, e in enumerate(EDU)}
 
-# matchmaker -> how often they screen hard constraints before sending (assumption)
+# matchmaker -> how often they screen hard constraints
+# before sending (assumption)
 MATCHMAKERS = {"A": 0.95, "B": 0.10, "C": 0.55, "D": 0.30, "E": 0.65}
 
 # Ground-truth reason templates (the free text a client might send back)
@@ -27,10 +28,18 @@ TEMPLATES = {
                  "Religion mismatch, please check my preferences."],
     "age": ["Too old for me.",
             "Age gap is bigger than I'd like.", "Younger than I wanted."],
-    "city": ["Lives too far, I don't want to relocate.", "Different city, long distance won't work.", "Not in my city."],
-    "education": ["Education level is lower than I hoped for.", "Not enough qualification for me."],
+    "city": ["Lives too far, I don't want to relocate.",
+             "Different city, long distance won't work.",
+             "Not in my city."],
+    "education": ["Education level is lower than I hoped for.",
+                  "Not enough qualification for me."],
     "height": ["Too short for me.", "Height is an issue."],
-    "other": ["Not feeling it.", "Not my type.", "Hmm no.", "Didn't connect with the photos.", "Not for me.", "Something felt off, can't say what."],
+    "other": ["Not feeling it.",
+              "Not my type.",
+              "Hmm no.",
+              "Didn't connect with the photos.",
+              "Not for me.",
+              "Something felt off, can't say what."],
 }
 
 
@@ -43,10 +52,19 @@ def make_profiles(n=300, rng=None):
             age=rng.randint(24, 40),
             city=rng.choice(CITIES),
             religion=rng.choices(RELIGIONS, RELIGION_W)[0],
-            smoking=rng.choices(["never", "occasionally", "regularly"], [0.70, 0.18, 0.12])[0],
-            wants_children=rng.choices(["yes", "no", "open"], [0.55, 0.12, 0.33])[0],
-            diet=rng.choices(["veg", "non-veg"], [0.40, 0.60])[0],
-            education=rng.choices(EDU, [0.1, 0.55, 0.35])[0],
+            smoking=rng.choices(["never", "occasionally", "regularly"],
+                                [0.70, 0.18, 0.12]
+                                )[0],
+            wants_children=rng.choices(
+                ["yes", "no", "open"],
+                [0.55, 0.12, 0.33]
+            )[0],
+            diet=rng.choices(["veg", "non-veg"],
+                             [0.40, 0.60]
+                             )[0],
+            education=rng.choices(EDU,
+                                  [0.1, 0.55, 0.35]
+                                  )[0],
             height_cm=rng.randint(150, 190),
         ))
     return pd.DataFrame(rows)
@@ -70,10 +88,12 @@ def make_clients(n=50, rng=None):
             # SOFT preferences (standard matrimonial filters)
             age_min=age_min,
             age_max=age_min + rng.randint(4, 10),
-            cities=(None if rng.random() < 0.35 else rng.sample(CITIES, rng.randint(1, 3))),
+            cities=(None if rng.random() < 0.35 else rng.sample(CITIES,
+                                                                rng.randint(1,
+                                                                            3))),
             edu_min=rng.choice(EDU),
             height_min=(None if rng.random() < 0.5 else rng.randint(155, 175)),
-            # revealed-preference: prob. a soft violation is tolerated (hidden from checker)
+            # revealed-preference: probability a soft violation is tolerated (hidden from checker)
             flex=round(rng.uniform(0.35, 0.95), 2),
         ))
     return pd.DataFrame(rows)
@@ -107,7 +127,8 @@ def simulate_shares(clients, profiles, n_shares=1000, seed=7):
         if hard:
             accepted = rng.random() < 0.04
             if not accepted:
-                reason = rng.choice(hard)["field"] if rng.random() < 0.9 else "other"
+                reason = rng.choice(hard)[
+                    "field"] if rng.random() < 0.9 else "other"
         else:
             p_acc = 0.68 * (c["flex"] ** len(soft))
             accepted = rng.random() < p_acc
@@ -116,7 +137,11 @@ def simulate_shares(clients, profiles, n_shares=1000, seed=7):
                     reason = rng.choice(soft)["field"]
                 else:
                     reason = "other"
-        feedback = None if accepted else rng.choice(TEMPLATES["other"] if (reason != "other" and rng.random() < 0.25) else TEMPLATES[reason])
+        feedback = None if accepted else rng.choice(
+            TEMPLATES["other"] if (
+                    reason != "other" and rng.random() < 0.25
+            ) else TEMPLATES[reason]
+        )
         rows.append(dict(
             share_id=k, client_id=c["client_id"], matchmaker=c["matchmaker"],
             profile_id=p["profile_id"], accepted=accepted,
@@ -134,4 +159,7 @@ def generate(seed=7):
 
 if __name__ == "__main__":
     c, p, s = generate()
+    c.to_csv("./data/client.csv", index=False)
+    s.to_csv("./data/shares.csv", index=False)
+    p.to_csv("./data/profiles.csv", index=False)
     print(s.accepted.mean(), len(s))

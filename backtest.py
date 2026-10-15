@@ -44,8 +44,6 @@ def run_backtest(clients, profiles, shares, use_llm=False):
         hard_blocked=len(blocked),
         hard_blocked_pct_of_shares=len(blocked) / n,
         rejections_caught=int((blocked.accepted == False).sum()),
-        recall_hard_preventable=(df.preventable_hard & df.blocked).sum() / max(
-            df.preventable_hard.sum(), 1),
         false_blocks=int(blocked.accepted.sum()),
         # accepted profiles we'd have wrongly blocked
         acceptance_after=kept.accepted.mean(),
